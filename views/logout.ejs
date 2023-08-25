@@ -65,26 +65,14 @@
             text-align: right;
             margin: 1rem;
         }
-        .flex{
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-        }
     </style>
 </head>
 
 <body>
     <main>
-        <form method="post" action="/login">
-            <h1>Login</h1>
-            <input type="text" name="name" placeholder="Name" />
-            <input type="email" name="email" placeholder="Email"/>
-            <div class="flex">
-                <button type="submit">Login</button>
-                <a href="/signup">
-                    <button type="button">Signn up</button>
-                </a>
-            </div>
+        <form method="get" action="/">
+            <h1>Log out</h1>
+            <button type="submit">Log out</button>
         </form>
     </main>
 </body>

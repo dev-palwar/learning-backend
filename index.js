@@ -19,7 +19,6 @@ const usersSchema = new mongoose.Schema({
   email: String,
 });
 
-
 // Creating a model/collection in the database
 const users = mongoose.model("users", usersSchema);
 
@@ -28,10 +27,34 @@ app.get("/", (req, res) => {
 });
 
 app.post("/add", async (req, res) => {
-  console.log(req.body);
-  const response = await users.create(req.body);
-  res.send("User added" + response);
+  const result = await users.findOne({ email: req.body.email });
+  const message = result ? "User already exists." : "Add your details";
+  if (result) {
+    res.render("signup", { message });
+  } else {
+    const response = await users.create(req.body);
+    const message = response ? "You can login now" : "User already exists";
+    res.render("signup", {message});
+  }
 });
+
+
+app.get('/signup', (req, res)=>{
+  const message = "Add you details";
+  res.render("signup", {message});
+})
+
+// Login api 
+app.post('/login', async (req, res)=>{
+  const result = await users.findOne({ email: req.body.email });
+  if(result){
+    console.log(req.body);
+    res.render('logout');
+  } else{
+    res.redirect('add');
+  }
+})
+
 
 app.listen(9000, () => {
   console.log("Server is running on port 9000");
