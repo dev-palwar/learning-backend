@@ -1,9 +1,12 @@
 const express = require("express");
-const router = require("../New folder/routes/users.js");
+const connectDatbase = require("./Database/config");
+const router = require("./Routes/users");
 
 const app = express();
-module.exports = app;
-
-
+connectDatbase();
 app.use(express.json());
 app.use("/users", router);
+
+app.listen(2000, ()=>{
+    console.log("Server running smooth");
+})
