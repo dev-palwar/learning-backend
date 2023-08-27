@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const users = require("../Models/users");
 const { Response } = require("../Utils/Features");
 
-const isAuthenticated = async (req, res, next) => {
+const ifAuthenticated = async (req, res, next) => {
   if (!req.cookies.token) {
     return Response(res, "Failed", "Login first");
   }
@@ -12,4 +12,4 @@ const isAuthenticated = async (req, res, next) => {
   next();
 };
 
-module.exports = isAuthenticated;
+module.exports = ifAuthenticated;

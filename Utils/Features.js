@@ -1,12 +1,17 @@
-const Response = (res, status, msg, userData) => {
-  res.json({
-    Status: status,
-    Message: msg,
-    userData,
-  });
+const Response = (res, status, msg, resFromDb) => {
+  msg
+    ? res.json({
+        Status: status,
+        Message: msg,
+        resFromDb,
+      })
+    : res.json({
+        Status: status,
+        resFromDb,
+      });
 };
 
-const setCookie = (res, token, resFromDb) => {
+const setCookie = (res, msg, token, resFromDb) => {
   res
     .cookie("token", token, {
       httpOnly: true,
@@ -14,7 +19,7 @@ const setCookie = (res, token, resFromDb) => {
     })
     .json({
       status: "Success",
-      Message: "User registard",
+      Message: msg,
       resFromDb,
     });
 };

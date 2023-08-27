@@ -1,12 +1,11 @@
 const express = require("express");
-const isAuthenticated = require("../Middlewares/Auth");
-const { login, signup, getProfile, } = require("../Controllers/Users");
-const router = express.Router();
+const ifAuthenticated = require("../Middlewares/Auth");
+const { login, signup, getProfile, logOut, } = require("../Controllers/Users");
+const userRouter = express.Router();
 
-router.post("/signup", signup);
+userRouter.post("/signup", signup);
+userRouter.post("/login", login);
+userRouter.get("/me", ifAuthenticated, getProfile);
+userRouter.get("/logout",ifAuthenticated, logOut);
 
-router.post("/login", login);
-
-router.get("/me", isAuthenticated, getProfile);
-
-module.exports = router;
+module.exports = userRouter;

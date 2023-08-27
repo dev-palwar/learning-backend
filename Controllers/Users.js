@@ -13,31 +13,42 @@ const login = async (req, res) => {
   }
 
   const passwordMatch = await bcrypt.compare(password, resFromDb.password);
-  
+
   if (passwordMatch) {
     const token = jwt.sign({ _id: resFromDb._id }, "fasoildfjlksfoiwrlkfdS");
-    setCookie(res, token, resFromDb);
+    setCookie(res, "Welcome", token, resFromDb);
   }
 };
 
 const signup = async (req, res) => {
-  const { name, email, password } = req.body;
-  let resFromDb = await users.findOne({ email });
+  try {
+    const { name, email, password } = req.body;
+    let resFromDb = await users.findOne({ email });
 
-  if (resFromDb) {
-    return Response(res, "Failed", "User already exists");
+    if (resFromDb) {
+      return Response(res, "Failed", "User already exists");
+    }
+
+    const hashedPass = await bcrypt.hash(password, 10);
+    resFromDb = await users.create({ name, email, password: hashedPass });
+    const token = jwt.sign({ _id: resFromDb._id }, "fasoildfjlksfoiwrlkfdS");
+
+    setCookie(res, "user registard successfully", token);
+  } catch (error) {
+    Response(res, "Failed", "Fill all the details");
   }
-
-  const hashedPass = await bcrypt.hash(password, 10);
-  resFromDb = await users.create({ name, email, password: hashedPass });
-  const token = jwt.sign({ _id: resFromDb._id }, "fasoildfjlksfoiwrlkfdS");
-
-  setCookie(res, token);
 };
 
 const getProfile = async (req, res) => {
   const userData = req.user;
-  Response(res, "", userData);
+  Response(res, "Success", "", userData);
 };
 
-module.exports = { login, signup, getProfile };
+const logOut = (req, res) => {
+  res.cookie("token", "", { expires: new Date(Date.now()) }).json({
+    status: "Success",
+    user: req.user,
+  });
+};
+
+module.exports = { login, signup, getProfile, logOut };
