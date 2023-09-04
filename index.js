@@ -1,23 +1,33 @@
 const express = require("express");
-const connectDatbase = require("./Database/config");
-const userRouter = require("./Routes/users");
-const tasksRouter = require("./Routes/tasks");
-const cookieParser = require("cookie-parser");
-const { Response } = require("./Utils/Features");
-const ifAuthenticated = require("./Middlewares/Auth");
-
 const app = express();
-connectDatbase();
+const path = require("path");
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
-app.use(express.json());
-app.use(cookieParser());
-app.use("/users", userRouter);
-app.use("/tasks", ifAuthenticated, tasksRouter);
+app.use(express.static(path.resolve(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  Response(res);
+  const userName = prompt("Please enter your name:");
+  if (userName !== null && userName !== "") {
+    // User entered a name; proceed with WebSocket connection
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  } else {
+    // User didn't enter a name; you can handle this case or display an error message
+    res.send("Please enter a valid name to proceed.");
+  }
 });
 
-app.listen(2000, () => {
-  console.log("Server running smooth");
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("chat-message", (msg, name) => {
+    console.log("message: " + msg, name.name);
+    io.emit("chat message", name.name + ":" + " " + msg);
+  });
+});
+
+const PORT = process.env.PORT || 9000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
