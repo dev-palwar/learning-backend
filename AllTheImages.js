@@ -43,10 +43,10 @@ async function product(url) {
 
     await browser.close();
   } catch (error) {
-    console.log("Achha bhai ab mai chalta hu");
+    console.log("Achha bhai ab mai chalta hu 👋");
   }
 }
 
 product(
-  "https://www.google.com/search?q=luffy+images&tbm=isch&ved=2ahUKEwiV7d608YGCAxXT5TgGHfZECZ8Q2-cCegQIABAA&oq=luffy+images&gs_lcp=CgNpbWcQAzIECCMQJzIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDoHCCMQ6gIQJzoHCAAQigUQQzoLCAAQgAQQsQMQgwE6CAgAELEDEIMBOggIABCABBCxAzoNCAAQigUQsQMQgwEQQzoECAAQA1ChB1jNMGDCMmgBcAB4AYABhAOIAYIZkgEHMC4zLjUuNJgBAKABAaoBC2d3cy13aXotaW1nsAEKwAEB&sclient=img&ei=pAIxZZWLM9PL4-EP9oml-Ak&bih=670&biw=1408&client=firefox-b-d"
+  "https://www.google.com/search?q=luffy+wallpapers&client=firefox-b-d&sca_esv=574836027&tbm=isch&sxsrf=AM9HkKmgJTomZgyVPKUnTgQu7ElrIQ9uMw:1697725451753&source=lnms&sa=X&ved=2ahUKEwje9OiTqIKCAxUfbGwGHUPpCCwQ_AUoAXoECAEQAw&biw=1408&bih=670&dpr=1.36"
 );

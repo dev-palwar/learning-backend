@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require('puppeteer');
 
 async function product(url) {
   const browser = await puppeteer.launch();
@@ -6,11 +6,14 @@ async function product(url) {
 
   await page.goto(url);
 
-  const [el] = await page.$x("/html/body/div/div/div/div[2]/img");
-  const src = el.getProperty("src");
-  const srcTxt = (await src).jsonValue();
-  
+  const srcTxt = await page.evaluate(() => {
+    const el = document.querySelector('img');
+    return el ? el.src : null;
+  });
+
   console.log(srcTxt);
+
+  await browser.close();
 }
 
-product("https://devpalwar.vercel.app/");
+product('https://animepahe.ru/anime/9f934bbc-8c05-cbac-51bd-7dcf42206522');
