@@ -3,6 +3,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
+const { SingleBar, Presets } = require("cli-progress");
 
 const downloadFolder = path.join(require("os").homedir(), "Desktop");
 
@@ -81,12 +82,15 @@ async function searchFor(searchQuery) {
         document.querySelector('button[type="submit"]').click();
       });
 
-      // Downloader
+      // Displaying downloading progress
+      const progressBar = new SingleBar({}, Presets.shades_grey);
+      let totalLength = 0;
+      let currentLength = 0;
+
       page4.on("request", async (interceptedRequest) => {
         const url = interceptedRequest.url();
         if (url.includes("files.nextcdn.org/get")) {
           console.log(`✌️${" "} Downloading...`);
-
           const response = await axios({
             url,
             method: "GET",
@@ -96,12 +100,22 @@ async function searchFor(searchQuery) {
           const filePath = path.join(downloadFolder, "downloaded_episode.mp4");
           const writer = fs.createWriteStream(filePath);
 
+          response.data.on("data", (chunk) => {
+            currentLength += chunk.length;
+            if (!totalLength) {
+              totalLength = +response.headers["content-length"];
+              progressBar.start(totalLength, currentLength);
+            }
+            progressBar.update(currentLength);
+          });
+
           response.data.pipe(writer);
 
           return new Promise((resolve, reject) => {
             writer.on("finish", () => {
               console.log("Downloading finished 🎉");
               browser.close();
+              progressBar.stop();
               resolve();
             });
             writer.on("error", reject);
